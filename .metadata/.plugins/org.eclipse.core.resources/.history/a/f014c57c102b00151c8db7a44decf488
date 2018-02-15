@@ -1,0 +1,48 @@
+package co.inharmonic.testing;
+
+public class ShortTest01 {
+	public void runTest01() {
+		/*
+		01. X = np.array([ [0,0,1],[0,1,1],[1,0,1],[1,1,1] ])
+		02. y = np.array([[0,1,1,0]]).T
+		03. syn0 = 2*np.random.random((3,4)) - 1
+		04. syn1 = 2*np.random.random((4,1)) - 1
+		05. for j in xrange(60000):
+		06. l1 = 1/(1+np.exp(-(np.dot(X,syn0))))
+		07. l2 = 1/(1+np.exp(-(np.dot(l1,syn1))))
+		08. l2_delta = (y - l2)*(l2*(1-l2))
+		09. l1_delta = l2_delta.dot(syn1.T) * (l1 * (1-l1))
+		10. syn1 += l1.T.dot(l2_delta)
+		11. syn0 += X.T.dot(l1_delta)
+		*/
+		
+		// 01. X = np.array([ [0,0,1],[0,1,1],[1,0,1],[1,1,1] ])
+		double[][] X = new double[][] {{0,0,1},{0,1,1},{1,0,1},{1,1,1}};
+		// 02. y = np.array([[0,1,1,0]]).T
+		double[][] Y = new double[][] {{0,1,1,0}};
+		// 03. syn0 = 2*np.random.random((3,4)) - 1
+		double[][] syn0 = new double[3][4];
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 4; j++) {
+				syn0[i][j] = 2 * Math.random() - 1;
+			}
+		}
+		// 04. syn1 = 2*np.random.random((4,1)) - 1
+		double[][] syn1 = new double[4][1];
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 1; j++) {
+				syn1[i][j] = 2 * Math.random() - 1;
+			}
+		}
+		// 05. for j in xrange(60000):
+		for (int i = 0; i < 60000; i++) {
+			// 06. l1 = 1/(1+np.exp(-(np.dot(X,syn0))))
+			// dot product (sum of input weights * inputs)
+			double[] l1 = new double[4];
+			for (int i = 0; i < 
+			
+			
+			
+		}
+	}
+}

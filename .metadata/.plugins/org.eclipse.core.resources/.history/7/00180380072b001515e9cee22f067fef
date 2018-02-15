@@ -1,0 +1,11 @@
+package co.inharmonic.testing;
+
+import co.inharmonic.net.NeuralNet;
+
+public class TestNet01 {
+
+	public static void main(String[] args) {
+		runTest01();
+	}
+
+}

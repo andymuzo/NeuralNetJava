@@ -1,0 +1,5 @@
+package co.inharmonic.audionet.control;
+
+public class AudioTrainingData {
+
+}

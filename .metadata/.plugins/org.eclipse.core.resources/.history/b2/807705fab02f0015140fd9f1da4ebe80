@@ -1,0 +1,5 @@
+package co.inharmonic.audio;
+
+public class AudioTest01 {
+	StdAudio
+}

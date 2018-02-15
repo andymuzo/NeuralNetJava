@@ -1,0 +1,43 @@
+package co.inharmonic.audionet.control;
+
+import co.inharmonic.audionet.neuralnet.TrainingData;
+
+public class AudioTrainingData implements TrainingData {
+
+	@Override
+	public double[][] getTrainingInput() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double[][] getTrainingOutput() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double getMaxInput() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getMaxOutput() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void addTrainingData() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int[] getCertaintyPercentages(double[] input, double[] output) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

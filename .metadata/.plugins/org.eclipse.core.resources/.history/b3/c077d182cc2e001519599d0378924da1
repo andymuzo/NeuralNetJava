@@ -1,0 +1,250 @@
+package co.inharmonic.colours.control;
+
+import java.util.ArrayList;
+
+public class TrainingData {
+	ArrayList<double[]> trainingInput;
+	ArrayList<double[]> trainingOutput;
+	int inputSize;
+	int outputSize;
+	double maxInput;
+	double maxOutput;
+	String[] outputNames;
+	
+	static public enum brightness {
+	    light,
+	    medium,
+	    dark
+	}
+	
+	static public enum saturation {
+	    high,
+	    medium,
+	    low
+	}
+	
+	static public enum colour {
+	    red,
+	    yellow,
+	    blue,
+	    orange,
+	    green,
+	    purple,
+	    brown,
+	    white,
+	    black
+	}
+	
+	public TrainingData(int inputSize, int outputSize, double maxInput, double maxOutput) {
+		trainingInput = new ArrayList<>();
+		trainingOutput = new ArrayList<>();
+		this.inputSize = inputSize;
+		this.outputSize = outputSize;
+		this.maxInput = maxInput;
+		this.maxOutput = maxOutput;
+		createOutputNamesFromEnums();
+	}
+	
+	/**
+	 * add a new set of training data
+	 * @param red RGB red value in a double out of 255.0
+	 * @param green RGB green value in a double out of 255.0
+	 * @param blue RGB blue value in a double out of 255.0
+	 * @param c enum of colour
+	 * @param b enum of brightness
+	 * @param s enum of saturation
+	 */
+	public void addTrainingData(double red, double green, double blue, colour c, brightness b, saturation s) {
+		trainingInput.add(new double[] {red, green, blue, maxInput});
+		trainingOutput.add(getOutputNumbers(c, b, s));
+	}
+	
+	/**
+	 * gets the training data input X in the form of a matrix
+	 * @return a matrix, X, in the form double[][]
+	 */
+	public double[][] getTrainingInput() {
+		double[][] input = new double[trainingInput.size()][inputSize];
+		for (int i = 0; i < trainingInput.size(); i++) {
+			input[i] = trainingInput.get(i);
+		}
+		return input;
+	}
+	
+	/**
+	 * get the training data output y in the form of a matrix
+	 * @return a matrix, y, in the form double[][]
+	 */
+	public double[][] getTrainingOutput() {
+		double[][] output = new double[trainingOutput.size()][outputSize];
+		for (int i = 0; i < trainingOutput.size(); i++) {
+			output[i] = trainingOutput.get(i);
+		}
+		return output;
+	}
+	
+	/**
+	 * Helper method to translate the enum into usable training values
+	 * @param c
+	 * @param b
+	 * @param s
+	 * @return
+	 */
+	private double[] getOutputNumbers(colour c, brightness b, saturation s) {
+		double[] output = new double[outputSize];
+		for (int i = 0; i < output.length; i++) {
+			output[i] = 0.0;
+		}
+		switch (c) {
+		case red:
+			output[0] = 1.0;
+			break;
+		case yellow:
+			output[1] = 1.0;
+			break;
+		case blue:
+			output[2] = 1.0;
+			break;
+		case orange:
+			output[3] = 1.0;
+			break;
+		case green:
+			output[4] = 1.0;
+			break;
+		case purple:
+			output[5] = 1.0;
+			break;
+		case brown:
+			output[6] = 1.0;
+			break;
+		case white:
+			output[7] = 1.0;
+			break;
+		case black:
+			output[8] = 1.0;
+			break;
+		default:
+		}
+		;
+
+		switch (b) {
+		case light:
+			output[9] = 1.0;
+			break;
+		case medium:
+			output[10] = 1.0;
+			break;
+		case dark:
+			output[11] = 1.0;
+			break;
+		default:
+		}
+		;
+
+		switch (s) {
+		case high:
+			output[12] = 1.0;
+			break;
+		case medium:
+			output[13] = 1.0;
+			break;
+		case low:
+			output[14] = 1.0;
+			break;
+		default:
+		}
+		;
+		return output;
+	}
+	
+	/**
+	 * get the name of the output at the given position
+	 * @param position
+	 * @return
+	 */
+	public String getOutputName(int position) {
+		return outputNames[position];
+	}
+	
+	/**
+	 * helper method to make an array of strings relating to the output positions using the enums in this class
+	 */
+	private void createOutputNamesFromEnums() {
+		outputNames = new String[outputSize];
+		for (int i = 0; i < colour.values().length; i++) {
+			outputNames[i] = colour.values()[i].toString();
+		}
+		for (int i = colour.values().length; i < colour.values().length + brightness.values().length; i++) {
+			outputNames[i] = colour.values()[i].toString();
+		}
+		for (int i = colour.values().length + brightness.values().length; i < outputSize; i++) {
+			outputNames[i] = colour.values()[i].toString();
+		}
+	}
+	
+	public int[] getCertaintyPercentages(double[] outputData) {
+		int[] certainty = new int[outputSize];
+		// get the totals for each category
+		double coloursTotal = 0.0;
+		double brightTotal = 0.0;
+		double satTotal = 0.0;
+		for (int i = 0; i < colour.values().length; i++) {
+			coloursTotal += outputData[i];
+		}
+		for (int i = colour.values().length; i < colour.values().length + brightness.values().length; i++) {
+			brightTotal += outputData[i];
+		}
+		for (int i = colour.values().length + brightness.values().length; i < outputSize; i++) {
+			satTotal += outputData[i];
+		}
+		
+		// calculate the certainty for each output value
+		for (int i = 0; i < colour.values().length; i++) {
+			certainty[i] = (int) ((outputData[i] / coloursTotal)) * 100.0);
+		}
+		for (int i = colour.values().length; i < colour.values().length + brightness.values().length; i++) {
+			brightTotal += outputData[i];
+		}
+		for (int i = colour.values().length + brightness.values().length; i < outputSize; i++) {
+			satTotal += outputData[i];
+		}
+		
+		
+		return certainty;
+	}
+	
+	// Getters and setters *********************************
+	
+	public double getMaxOutput() {
+		return maxOutput;
+	}
+
+	public void setMaxOutput(double maxOutput) {
+		this.maxOutput = maxOutput;
+	}
+
+	public double getMaxInput() {
+		return maxInput;
+	}
+
+	public void setMaxInput(double maxInput) {
+		this.maxInput = maxInput;
+	}
+
+	public int getOutputSize() {
+		return outputSize;
+	}
+
+	public void setOutputSize(int outputSize) {
+		this.outputSize = outputSize;
+	}
+
+	public int getInputSize() {
+		return inputSize;
+	}
+
+	public void setInputSize(int inputSize) {
+		this.inputSize = inputSize;
+	}
+
+}

@@ -1,0 +1,149 @@
+package co.inharmonic.colours.tools;
+
+/**
+ * Contains methods for performing operations on matrices
+ * Matrices are in the form double[rows][columns]
+ * @author Andrew
+ *
+ */
+public class MatrixOps {
+	/**
+	 * multiplies the two matrices
+	 * for "divide", transpose matrixB before calling method
+	 * @param matrixA
+	 * @param matrixB
+	 * @return
+	 */
+	public double[][] dotProduct(double[][] matrixA, double[][] matrixB) {
+		if (matrixA[0].length != matrixB.length) {
+			System.out.println("Matrices can't be multiplied");
+			printMatrix("A:", matrixA);
+			printMatrix("B:", matrixB);
+		}
+		double[][] matrixC = new double[matrixA.length][matrixB[0].length];
+		for (int i = 0; i < matrixC.length; i++) {
+			for (int j = 0; j < matrixC[0].length; j++) {
+				matrixC[i][j] = 0.0;
+			}
+		}
+		for (int i = 0; i < matrixA.length; i++) {
+			for (int j = 0; j < matrixB[0].length; j++) {
+				for (int k = 0; k < matrixA[0].length; k++) {
+					matrixC[i][j] +=  matrixA[i][k] * matrixB[k][j];
+				}
+			}
+		}
+		return matrixC;
+	}
+	
+	/**
+	 * returns a new matrix, the transposition of the input
+	 * Inputs are unchanged.
+	 * @param array
+	 * @return
+	 */
+	public double[][] transpose(double[][] array) {
+		if (array == null || array.length == 0)// empty or unset array
+			return array;
+
+		int width = array.length;
+		int height = array[0].length;
+
+		double[][] arrayNew = new double[height][width];
+
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				arrayNew[y][x] = array[x][y];
+			}
+		}
+		return arrayNew;
+	}
+	
+	/**
+	 * Adds the matrices together
+	 * the matrices must be the same size! Check this before calling
+	 * Inputs are unchanged.
+	 * @param matrixA
+	 * @param matrixB
+	 * @return
+	 */
+	public double[][] matrixAdd(double[][] matrixA, double[][] matrixB) {
+		if ((matrixA.length != matrixB.length || matrixA[0].length != matrixB[0].length)) {
+			System.out.println("Matricis cannot be added:");
+			printMatrix(matrixA);
+			printMatrix(matrixB);
+		}
+		double[][] arrayC = new double[matrixA.length][matrixA[0].length];
+		for (int i = 0; i < matrixA.length; i++) {
+			for (int j = 0; j < matrixA[0].length; j++) {
+				arrayC[i][j] = matrixA[i][j] + matrixB[i][j];
+			}
+		}
+		return arrayC;
+	}
+	
+	/**
+	 * calculates matrixA minus matrixB
+	 * the matrices must be the same size! Check this before calling
+	 * Inputs are unchanged.
+	 * @param matrixA
+	 * @param matrixB
+	 * @return matrixA - matrixB
+	 */
+	public double[][] matrixSubtract(double[][] matrixA, double[][] matrixB) {
+		if ((matrixA.length != matrixB.length || matrixA[0].length != matrixB[0].length)) {
+			System.out.println("Matricis cannot be added:");
+			printMatrix(matrixA);
+			printMatrix(matrixB);
+		}
+		double[][] arrayC = new double[matrixA.length][matrixA[0].length];
+		for (int i = 0; i < matrixA.length; i++) {
+			for (int j = 0; j < matrixA[0].length; j++) {
+				arrayC[i][j] = matrixA[i][j] - matrixB[i][j];
+			}
+		}
+		return arrayC;
+	}
+	
+	/**
+	 * returns a new matrix: the input times by the scalar.
+	 * Inputs are unchanged.
+	 * @param matrix
+	 * @param scalar
+	 * @return
+	 */
+	public double[][] matrixScalar(double[][] matrix, double scalar) {
+		double[][] result = new double[matrix.length][matrix[0].length];
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[0].length; j++) {
+				result[i][j] = matrix[i][j] * scalar;
+			}
+		}		
+		return result;
+	}
+	
+	/**
+	 * prints an array in the form of a matrix
+	 * @param matrix
+	 */
+	public void printMatrix(double[][] matrix) {
+		String output = "";
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[0].length; j++) {
+				output += matrix[i][j] + " ";
+			}
+			output += "\n";
+		}
+		System.out.println(output);
+	}
+	
+	/**
+	 * prints a description followed by an array in the form of a matrix
+	 * @param tag
+	 * @param matrix
+	 */
+	public void printMatrix(String tag, double[][] matrix) {
+		System.out.println(tag);
+		printMatrix(matrix);
+	}
+}

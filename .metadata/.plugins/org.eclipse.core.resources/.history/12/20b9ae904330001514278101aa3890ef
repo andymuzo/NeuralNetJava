@@ -1,0 +1,296 @@
+package co.inharmonic.audionet.tools;
+
+/**
+ * Contains methods for performing operations on matrices
+ * Matrices are in the form double[rows][columns]
+ * @author Andrew Rogers
+ *
+ */
+public final class MatrixOps {
+	/**
+	 * multiplies the two matrices
+	 * for "divide", transpose matrixB before calling method
+	 * @param matrixA
+	 * @param matrixB
+	 * @return
+	 */
+	public static double[][] dot(double[][] matrixA, double[][] matrixB) {
+		if (matrixA[0].length != matrixB.length) {
+			System.out.println("Matrices can't be multiplied");
+			printMatrix("A:", matrixA);
+			printMatrix("B:", matrixB);
+		}
+		double[][] matrixC = new double[matrixA.length][matrixB[0].length];
+		for (int i = 0; i < matrixC.length; i++) {
+			for (int j = 0; j < matrixC[0].length; j++) {
+				matrixC[i][j] = 0.0;
+			}
+		}
+		for (int i = 0; i < matrixA.length; i++) {
+			for (int j = 0; j < matrixB[0].length; j++) {
+				for (int k = 0; k < matrixA[0].length; k++) {
+					matrixC[i][j] +=  matrixA[i][k] * matrixB[k][j];
+				}
+			}
+		}
+		return matrixC;
+	}
+	
+	/**
+	 * same as transpose(), shortened name for convenience
+	 * @param array
+	 * @return
+	 */
+	public  static double[][] t(double[][] array) {
+		return transpose(array);
+	}
+	
+	/**
+	 * returns a new matrix, the transposition of the input
+	 * Inputs are unchanged.
+	 * @param array
+	 * @return
+	 */
+	public  static double[][] transpose(double[][] array) {
+		if (array == null || array.length == 0)// empty or unset array
+			return array;
+
+		int width = array.length;
+		int height = array[0].length;
+
+		double[][] arrayNew = new double[height][width];
+
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				arrayNew[y][x] = array[x][y];
+			}
+		}
+		return arrayNew;
+	}
+	
+	/**
+	 * Adds the matrices together
+	 * the matrices must be the same size! Check this before calling
+	 * Inputs are unchanged.
+	 * @param matrixA
+	 * @param matrixB
+	 * @return
+	 */
+	public  static double[][] add(double[][] matrixA, double[][] matrixB) {
+		if ((matrixA.length != matrixB.length || matrixA[0].length != matrixB[0].length)) {
+			System.out.println("Matricis cannot be added:");
+			printMatrix(matrixA);
+			printMatrix(matrixB);
+		}
+		double[][] arrayC = new double[matrixA.length][matrixA[0].length];
+		for (int i = 0; i < matrixA.length; i++) {
+			for (int j = 0; j < matrixA[0].length; j++) {
+				arrayC[i][j] = matrixA[i][j] + matrixB[i][j];
+			}
+		}
+		return arrayC;
+	}
+	
+	/**
+	 * calculates matrixA minus matrixB
+	 * the matrices must be the same size! Check this before calling
+	 * Inputs are unchanged.
+	 * @param matrixA
+	 * @param matrixB
+	 * @return matrixA - matrixB
+	 */
+	public static double[][] subtract(double[][] matrixA, double[][] matrixB) {
+		if ((matrixA.length != matrixB.length || matrixA[0].length != matrixB[0].length)) {
+			System.out.println("Matricis cannot be added:");
+			printMatrix(matrixA);
+			printMatrix(matrixB);
+		}
+		double[][] arrayC = new double[matrixA.length][matrixA[0].length];
+		for (int i = 0; i < matrixA.length; i++) {
+			for (int j = 0; j < matrixA[0].length; j++) {
+				arrayC[i][j] = matrixA[i][j] - matrixB[i][j];
+			}
+		}
+		return arrayC;
+	}
+	
+	/**
+	 * returns a new matrix: the input times by the scalar.
+	 * Inputs are unchanged.
+	 * @param matrix
+	 * @param scalar
+	 * @return
+	 */
+	public static double[][] scale(double[][] matrix, double scalar) {
+		double[][] result = new double[matrix.length][matrix[0].length];
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[0].length; j++) {
+				result[i][j] = matrix[i][j] * scalar;
+			}
+		}		
+		return result;
+	}
+	
+	/**
+	 * prints an array in the form of a matrix
+	 * @param matrix
+	 */
+	public static void printMatrix(double[][] matrix) {
+		String output = "";
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[0].length; j++) {
+				output += matrix[i][j] + " ";
+			}
+			output += "\n";
+		}
+		System.out.println(output);
+	}
+	
+	/**
+	 * prints a description followed by an array in the form of a matrix
+	 * @param tag
+	 * @param matrix
+	 */
+	public static void printMatrix(String tag, double[][] matrix) {
+		System.out.println(tag);
+		printMatrix(matrix);
+	}
+	
+	/**
+	 * prints an array in the form of a matrix
+	 * @param matrix
+	 */
+	public static void printMatrixInts(int[][] matrix) {
+		String output = "";
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[0].length; j++) {
+				output += matrix[i][j] + " ";
+			}
+			output += "\n";
+		}
+		System.out.println(output);
+	}
+	
+	/**
+	 * prints a description followed by an array in the form of a matrix
+	 * @param tag
+	 * @param matrix
+	 */
+	public static void printMatrixInts(String tag, double[][] matrix) {
+		System.out.println(tag);
+		printMatrixInts(convertToInts(matrix));
+	}
+	
+	/**
+	 * slightly misleading title, multiplies the matrix by 100.0 first so outputs the values out of 100
+	 * @param matrixDouble
+	 * @return
+	 */
+	public static int[][] convertToInts(double[][] matrixDouble) {
+		int[][] matrixInts = new int[matrixDouble.length][matrixDouble[0].length];
+		for (int i = 0; i < matrixInts.length; i++) {
+			for (int j = 0; j < matrixInts[0].length; j++) {
+				matrixInts[i][j] = (int) (matrixDouble[i][j] * 100.0);
+			}
+		}
+		return matrixInts;
+	}
+	
+	/**
+	 * normalises the matrix for when the minimum value is 0.0
+	 * @param matrix
+	 * @param maxValue the maximum value the data can be in the input matrix
+	 * @return the input matrix between the values of 0.0 and 1.0
+	 */
+	public static double[][] normalise(double[][] matrix, double maxValue) {
+		double[][] normalised = new double[matrix.length][matrix[0].length];
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[0].length; j++) {
+				normalised[i][j] = matrix[i][j] / maxValue;
+			}
+		}
+		return normalised;
+	}
+	
+	/**
+	 * normalises the matrix
+	 * @param matrix a matrix with all the values between the minValue and maxValue
+	 * @param maxValue the maximum value the data can be in the input matrix
+	 * @param minValue the minimum value the data can be in the input matrix
+	 * @return the input matrix between the values of 0.0 and 1.0
+	 */
+	public static double[][] normalise(double[][] matrix, double minValue, double maxValue) {
+		double[][] normalised = new double[matrix.length][matrix[0].length];
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[0].length; j++) {
+				normalised[i][j] = (matrix[i][j] - minValue) / (maxValue - minValue);
+			}
+		}
+		return normalised;
+	}
+	
+	/**
+	 * there has got to be a better name for this method...
+	 * Takes a matrix in the input range 0.0 to 0.1 and outputs a copy of the matrix
+	 * with all values normalised to the range minValue to MaxValue
+	 * @param matrix a matrix with all values between the values of 0.0 to 0.1
+	 * @param maxValue the maximum value the data can be in the output matrix
+	 * @param minValue the minimum value the data can be in the output matrix
+	 * @return the input matrix between the values of minValue and maxValue
+	 */
+	public static double[][] deNormalise(double[][] matrix, double minValue, double maxValue) {
+		double[][] deNormalised = new double[matrix.length][matrix[0].length];
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[0].length; j++) {
+				deNormalised[i][j] = (matrix[i][j] * (maxValue - minValue)) + minValue;
+			}
+		}
+		return deNormalised;
+	}
+	
+	/**
+	 * normalises the matrix for when the minimum value is 0.0
+	 * @param matrix
+	 * @param maxValue the maximum value the data can be in the input matrix
+	 * @return the input matrix between the values of 0.0 and 1.0
+	 */
+	public static double[] normalise(double[] matrix, double maxValue) {
+		double[] normalised = new double[matrix.length];
+		for (int i = 0; i < matrix.length; i++) {
+			normalised[i] = matrix[i] / maxValue;
+		}
+		return normalised;
+	}
+	
+	/**
+	 * normalises the matrix
+	 * @param matrix a matrix with all the values between the minValue and maxValue
+	 * @param maxValue the maximum value the data can be in the input matrix
+	 * @param minValue the minimum value the data can be in the input matrix
+	 * @return the input matrix between the values of 0.0 and 1.0
+	 */
+	public static double[] normalise(double[] matrix, double minValue, double maxValue) {
+		double[] normalised = new double[matrix.length];
+		for (int i = 0; i < matrix.length; i++) {
+			normalised[i] = (matrix[i] - minValue) / (maxValue - minValue);
+		}
+		return normalised;
+	}
+	
+	/**
+	 * there has got to be a better name for this method...
+	 * Takes a matrix in the input range 0.0 to 0.1 and outputs a copy of the matrix
+	 * with all values normalised to the range minValue to MaxValue
+	 * @param matrix a matrix with all values between the values of 0.0 to 0.1
+	 * @param maxValue the maximum value the data can be in the output matrix
+	 * @param minValue the minimum value the data can be in the output matrix
+	 * @return the input matrix between the values of minValue and maxValue
+	 */
+	public static double[] deNormalise(double[] matrix, double minValue, double maxValue) {
+		double[] normalised = new double[matrix.length];
+		for (int i = 0; i < matrix.length; i++) {
+			normalised[i] = (matrix[i] * (maxValue - minValue)) + minValue;
+		}
+		return normalised;
+	}
+}

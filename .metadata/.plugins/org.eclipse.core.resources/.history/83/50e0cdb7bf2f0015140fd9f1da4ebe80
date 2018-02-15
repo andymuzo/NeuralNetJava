@@ -1,0 +1,69 @@
+package co.inharmonic.audionet.control;
+
+import java.util.ArrayList;
+
+import co.inharmonic.audionet.neuralnet.TrainingData;
+
+public class AudioTrainingData implements TrainingData {
+
+	ArrayList<double[]> trainingInput;
+	ArrayList<double[]> trainingOutput;
+	int inputSize;
+	int outputSize;
+	double maxInput;
+	double minIntput;
+	double maxOutput;
+	double minOutput;
+	String[] outputNames;
+	
+	@Override
+	public void setup(int inputSize, int outputSize, double maxInput,
+			double minInput, double minOutput, double maxOutput) {
+		trainingInput = new ArrayList<>();
+		trainingOutput = new ArrayList<>();
+		this.inputSize = inputSize;
+		this.outputSize = outputSize;
+		this.maxInput = maxInput;
+		this.maxOutput = maxOutput;
+	}
+	
+	@Override
+	public void addTrainingData(double[] input, double[] output) {
+		trainingInput.add(normalise(input, maxInput, minInput);
+		trainingOutput.add(output);	
+	}
+	
+	@Override
+	public double[][] getTrainingInput() {
+		double[][] input = new double[trainingInput.size()][inputSize];
+		for (int i = 0; i < trainingInput.size(); i++) {
+			input[i] = trainingInput.get(i);
+		}
+		return input;
+	}
+
+	@Override
+	public double[][] getTrainingOutput() {
+		double[][] output = new double[trainingOutput.size()][outputSize];
+		for (int i = 0; i < trainingOutput.size(); i++) {
+			output[i] = trainingOutput.get(i);
+		}
+		return output;
+	}
+
+	@Override
+	public double getMaxInput() {
+		return maxInput;
+	}
+
+	@Override
+	public double getMaxOutput() {
+		return maxOutput;
+	}
+
+	@Override
+	public int[] getCertaintyPercentages(double[] inputData) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+}

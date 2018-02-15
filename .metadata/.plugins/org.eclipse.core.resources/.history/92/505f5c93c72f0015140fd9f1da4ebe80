@@ -1,0 +1,94 @@
+package co.inharmonic.audionet.neuralnet;
+
+import java.util.ArrayList;
+
+import co.inharmonic.audionet.tools.MatrixOps;
+
+public class TrainingData  {
+
+	ArrayList<double[]> trainingInput;
+	ArrayList<double[]> trainingOutput;
+	int inputSize;
+	int outputSize;
+	double maxInput;
+	double minInput;
+	double maxOutput;
+	double minOutput;
+	String[] outputNames;
+	MatrixOps m;
+	
+	/**
+	 * sets all inital paramaters for the data
+	 * @param inputSize
+	 * @param outputSize
+	 * @param maxInput
+	 * @param minInput
+	 * @param minOutput
+	 * @param maxOutput
+	 */
+	public void setup(int inputSize, int outputSize, double maxInput,
+			double minInput, double minOutput, double maxOutput) {
+		trainingInput = new ArrayList<>();
+		trainingOutput = new ArrayList<>();
+		this.inputSize = inputSize;
+		this.outputSize = outputSize;
+		this.maxInput = maxInput;
+		this.minInput = minInput;
+		this.maxOutput = maxOutput;
+		this.minOutput = minOutput;
+		this.m = new MatrixOps();
+	}
+	
+	/**
+	 * add a new set of training data.
+	 * This consists of:
+	 * @param input a double[] of the inputs for each node, don't forget the bias set to MaxInput as the last node
+	 * @param output a double[] of the expected output for each node given the input data
+	 */
+	public void addTrainingData(double[] input, double[] output) {
+		trainingInput.add(m.normalise(input, minInput, maxInput));
+		trainingOutput.add(m.normalise(output, minOutput, maxOutput));	
+	}
+	
+	/**
+	 * gets the training data input X in the form of a matrix
+	 * @return a matrix, X, in the form double[][]
+	 */
+	public double[][] getTrainingInput() {
+		double[][] input = new double[trainingInput.size()][inputSize];
+		for (int i = 0; i < trainingInput.size(); i++) {
+			input[i] = trainingInput.get(i);
+		}
+		return input;
+	}
+
+	/**
+	 * get the training data output y in the form of a matrix
+	 * @return a matrix, y, in the form double[][]
+	 */
+	public double[][] getTrainingOutput() {
+		double[][] output = new double[trainingOutput.size()][outputSize];
+		for (int i = 0; i < trainingOutput.size(); i++) {
+			output[i] = trainingOutput.get(i);
+		}
+		return output;
+	}
+
+	public double getMaxInput() {
+		return maxInput;
+	}
+
+	public double getMaxOutput() {
+		return maxOutput;
+	}
+
+	/**
+	 * returns an array of ints showing the percent certainty of each position in the outputData array
+	 * @param outputData
+	 * @return
+	 */
+	public int[] getCertaintyPercentages(double[] inputData) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+}

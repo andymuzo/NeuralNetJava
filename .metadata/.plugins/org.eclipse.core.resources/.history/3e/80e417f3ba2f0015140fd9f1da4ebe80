@@ -1,0 +1,64 @@
+package co.inharmonic.audionet.control;
+
+import java.util.ArrayList;
+
+import co.inharmonic.audionet.neuralnet.TrainingData;
+
+public class AudioTrainingData implements TrainingData {
+
+	ArrayList<double[]> trainingInput;
+	ArrayList<double[]> trainingOutput;
+	int inputSize;
+	int outputSize;
+	double maxInput;
+	double maxOutput;
+	String[] outputNames;
+	
+	@Override
+	public double[][] getTrainingInput() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double[][] getTrainingOutput() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double getMaxInput() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getMaxOutput() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int[] getCertaintyPercentages(double[] inputData) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void addTrainingData(double[] input, double[] output) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setup(int inputSize, int outputSize, double maxInput,
+			double maxOutput) {
+		trainingInput = new ArrayList<>();
+		trainingOutput = new ArrayList<>();
+		this.inputSize = inputSize;
+		this.outputSize = outputSize;
+		this.maxInput = maxInput;
+		this.maxOutput = maxOutput;		
+	}
+
+}

@@ -1,0 +1,11 @@
+package co.inharmonic.audionet.neuralnet;
+
+public interface TrainingData {
+	void setup(int inputSize, int outputSize, double maxInput, double maxOutput);
+	double[][] getTrainingInput();
+	double[][] getTrainingOutput();
+	double getMaxInput();
+	double getMaxOutput();
+	void addTrainingData(double[] input, double[] output);
+	int[] getCertaintyPercentages(double[] outputData);
+}

@@ -1,0 +1,37 @@
+package co.inharmonic.audionet.neuralnet;
+
+public interface TrainingData {
+	void setup(int inputSize, int outputSize, double maxInput, double minInput, double minOutput, double maxOutput);
+	
+	/**
+	 * gets the training data input X in the form of a matrix
+	 * @return a matrix, X, in the form double[][]
+	 */
+	double[][] getTrainingInput();
+	
+	/**
+	 * get the training data output y in the form of a matrix
+	 * @return a matrix, y, in the form double[][]
+	 */
+	double[][] getTrainingOutput();
+	
+	
+	double getMaxInput();
+	
+	double getMaxOutput();
+	
+	/**
+	 * add a new set of training data.
+	 * This consists of:
+	 * @param input a double[] of the inputs for each node, don't forget the bias set to MaxInput as the last node
+	 * @param output a double[] of the expected output for each node given the input data
+	 */
+	void addTrainingData(double[] input, double[] output);
+	
+	/**
+	 * returns an array of ints showing the percent certainty of each position in the outputData array
+	 * @param outputData
+	 * @return
+	 */
+	int[] getCertaintyPercentages(double[] outputData);
+}

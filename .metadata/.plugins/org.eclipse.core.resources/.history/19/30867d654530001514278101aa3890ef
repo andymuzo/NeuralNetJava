@@ -1,0 +1,77 @@
+package co.inharmonic.audionet.control;
+
+import java.util.Arrays;
+
+import co.inharmonic.audionet.audiotools.StdAudio;
+import co.inharmonic.audionet.neuralnet.TrainingData;
+import co.inharmonic.audionet.tools.MatrixOps;
+
+/**
+ * This is used to generate training and test data from an audio file, 
+ * different methods will accomplish this in different ways.
+ * @author Andrew
+ *
+ */
+public class AudioData {
+	private String fileName;
+	private int sampleStart;
+	private int sampleEnd;
+
+	public void setAudioFile(String fileName, int sampleStart, int sampleEnd) {
+		this.fileName = fileName;
+		this.sampleStart = sampleStart;
+		this.sampleEnd = sampleEnd;
+	}
+	
+	/**
+	 * creates training data whereby a certain number of samples used as inputs, 
+	 * the output is one sample after the last one of the inputs.
+	 * This is populated directly into the TrainingData object
+	 * it is assumed there is just a single output
+	 * @return
+	 */
+	public void predictiveTraining(TrainingData training) {
+		double[] audioInput = Arrays.copyOfRange(StdAudio.read(fileName), sampleStart, sampleEnd);
+		System.out.println("Opened audio file " + fileName + ", " + audioInput.length + " samples long");
+		
+		int inputNodes = training.getInputSize();
+		int outputNodes = training.getOutputSize();
+		// iterate over the array
+		for (int i = 0; i < audioInput.length - inputNodes - outputNodes; i++) {
+			// input
+			double[] input = Arrays.copyOfRange(audioInput, i, i + inputNodes);
+			// output
+			double[] output = Arrays.copyOfRange(audioInput, i + inputNodes, i + inputNodes + outputNodes);
+			training.addTrainingData(input, output);
+		}
+	}
+	
+	/**
+	 * this only works with a single output, if more than one it constructs 
+	 * an audio file just from the first number from each nested array
+	 * @param filename the filename the audio should be saved as, e.g. "audio/violin.wav"
+	 * @param outputs the array of outputs to be turned into an audiofile
+	 */
+	public void outputAudioFile(String filename, double[][] outputs) {
+		StdAudio.save(filename, MatrixOps.transpose(outputs)[0]);
+		System.out.println("file saved as \"" + filename + "\"");
+	}
+	
+	public double[][] getNextSamplePredictive(String filename) {
+		double[] inputFile = StdAudio.read(filename);
+		// create a new input list (double[]) from the start of each sample
+		double[][] output;
+		
+		
+		
+		return output;		
+	}
+	
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+}

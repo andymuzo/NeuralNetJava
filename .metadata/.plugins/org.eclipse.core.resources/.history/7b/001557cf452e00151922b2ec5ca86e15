@@ -1,0 +1,9 @@
+package co.inharmonic.colours;
+
+public class Colours {
+
+	public static void main(String[] args) {
+		ColourNet net = new ColourNet();
+		net.start();
+	}
+}

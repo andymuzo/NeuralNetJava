@@ -1,0 +1,246 @@
+package co.inharmonic.testing;
+
+public class ShortTest01 {
+	public void runTest01() {
+		/*
+		 * The Python code translated to Java:
+		01. X = np.array([ [0,0,1],[0,1,1],[1,0,1],[1,1,1] ])
+		02. y = np.array([[0,1,1,0]]).T
+		03. syn0 = 2*np.random.random((3,4)) - 1
+		04. syn1 = 2*np.random.random((4,1)) - 1
+		05. for j in xrange(60000):
+		06. 	l1 = 1/(1+np.exp(-(np.dot(X,syn0))))
+		07. 	l2 = 1/(1+np.exp(-(np.dot(l1,syn1))))
+		08. 	l2_delta = (y - l2)*(l2*(1-l2))
+		09. 	l1_delta = l2_delta.dot(syn1.T) * (l1 * (1-l1))
+		10. 	syn1 += l1.T.dot(l2_delta)
+		11. 	syn0 += X.T.dot(l1_delta)
+		*/
+		
+		// 01. X = np.array([ [0,0,1],[0,1,1],[1,0,1],[1,1,1] ])
+		double[][] X = new double[][] {{0.0,0.0,1.0},{0.0,1.0,1.0},{1.0,0.0,1.0},{1.0,1.0,1.0}};
+		// 02. y = np.array([[0,1,1,0]]).T
+		double[][] y = new double[][] {{0.0},{1.0},{1.0},{0.0}};
+		// 03. syn0 = 2*np.random.random((3,4)) - 1
+		double[][] synapse0 = new double[3][4];
+		populateRandom(synapse0);
+		
+		// 04. syn1 = 2*np.random.random((4,1)) - 1
+		double[][] synapse1 = new double[4][1];
+		populateRandom(synapse1);
+		
+		// declaring layers
+		double[][] layer1 = new double[0][0];
+		double[][] layer2 = new double[0][0];
+		
+		System.out.println("X:");
+		printMatrix(X);
+		
+		System.out.println("y:");
+		printMatrix(y);
+		
+		System.out.println("Synapse0:");
+		printMatrix(synapse0);
+		
+		System.out.println("Synapse1:");
+		printMatrix(synapse1);
+		
+		double trainingRate = 0.1;
+		
+		// 05. for j in xrange(60000):
+		for (int i = 0; i < 60000; i++) {
+			// 06. l1 = 1/(1+np.exp(-(np.dot(X,syn0))))
+			layer1 = forwardPropogate(X, synapse0);
+			
+			// 07. l2 = 1/(1+np.exp(-(np.dot(l1,syn1))))
+			layer2 = forwardPropogate(layer1, synapse1);
+			
+			// 08. l2_delta = (y - l2)*(l2*(1-l2))
+			double[][] layer2Delta = new double[y.length][y[0].length];
+			for (int j = 0; j < y.length; j++) {
+				for (int k = 0; k < y[0].length; k++) {
+					layer2Delta[j][k] = (y[j][k] - layer2[j][k]) 
+							* (layer2[j][k] * (1.0 - layer2[j][k]));
+				}
+			}
+			
+			// 09. l1_delta = l2_delta.dot(syn1.T) * (l1 * (1-l1))
+			double[][] layer1Delta = dotProduct(layer2Delta, transpose(synapse1));
+			for (int j = 0; j < y.length; j++) {
+				for (int k = 0; k < y[0].length; k++) {
+					layer1Delta[j][k] = layer1Delta[j][k] * (layer1[j][k] * (1.0 - layer1[j][k]));
+				}
+			}
+			
+			// 10. syn1 += l1.T.dot(l2_delta)
+			synapse1 = matrixAdd(synapse1, matrixScalar(dotProduct(transpose(layer1), layer2Delta), trainingRate));
+			// 11. syn0 += X.T.dot(l1_delta)
+			synapse0 = matrixAdd(synapse0, matrixScalar(dotProduct(transpose(X), layer1Delta), trainingRate));
+			
+			// TODO: Remove, just error checking stuff...
+			if (i % 59000 == 0) {
+				layer1 = forwardPropogate(X, synapse0);
+				layer2 = forwardPropogate(layer1, synapse1);
+				System.out.println("Output for X after training:");
+				printMatrix(layer2);
+			
+				System.out.println("Synapse0:");
+				printMatrix(synapse0);
+			
+				System.out.println("Synapse1:");
+				printMatrix(synapse1);
+			}
+			
+		}
+		// get an output
+		layer1 = forwardPropogate(X, synapse0);
+		layer2 = forwardPropogate(layer1, synapse1);
+		System.out.println("Output for X after training:");
+		printMatrix(layer2);
+		
+		System.out.println("Synapse0:");
+		printMatrix(synapse0);
+		
+		System.out.println("Synapse1:");
+		printMatrix(synapse1);
+	}
+	
+	private double[][] forwardPropogate(double[][] inputs, double[][] weights) {
+		// 06. l1 = 1/(1+np.exp(-(np.dot(X,syn0))))
+		double[][] resultLayer = dotProduct(inputs, weights);
+		sigmoid(resultLayer);
+		return resultLayer;
+	}
+	
+	/**
+	 * multiplies the two matrices
+	 * for "divide", transpose matrixB
+	 * @param matrixA
+	 * @param matrixB
+	 * @return
+	 */
+	private double[][] dotProduct(double[][] matrixA, double[][] matrixB) {
+		if (matrixA[0].length != matrixB.length) {
+			System.out.println("Matricis can't be multiplied");
+			System.out.println("A:");
+			printMatrix(matrixA);
+			System.out.println("B:");
+			printMatrix(matrixB);
+		}
+		
+		double[][] matrixC = new double[matrixA.length][matrixB[0].length];
+		// initialise the matrix
+		for (int i = 0; i < matrixC.length; i++) {
+			for (int j = 0; j < matrixC[0].length; j++) {
+				matrixC[i][j] = 0.0;
+			}
+		}
+				
+		for (int i = 0; i < matrixA.length; i++) {
+			for (int j = 0; j < matrixB[0].length; j++) {
+				for (int k = 0; k < matrixA[0].length; k++) {
+					matrixC[i][j] +=  matrixA[i][k] * matrixB[k][j];
+				}
+			}
+		}
+		return matrixC;
+	}
+	
+	/**
+	 * applies the sigmoid function to all elements in an matrix
+	 * Input matrix is changed.
+	 * @param array
+	 */
+	private void sigmoid(double[][] matrix) {
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[0].length; j++) {
+				matrix[i][j] = 1.0 / (1.0 + Math.exp(-matrix[i][j]));
+			}
+		}
+	}
+	
+	/**
+	 * returns a new matrix, the transposition of the input
+	 * Inputs are unchanged.
+	 * @param array
+	 * @return
+	 */
+	private double[][] transpose(double[][] array) {
+		if (array == null || array.length == 0)// empty or unset array
+			return array;
+
+		int width = array.length;
+		int height = array[0].length;
+
+		double[][] arrayNew = new double[height][width];
+
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				arrayNew[y][x] = array[x][y];
+			}
+		}
+		return arrayNew;
+	}
+	
+	/**
+	 * the matrices must be the same size! Check this before calling
+	 * Inputs are unchanged.
+	 * @param matrixA
+	 * @param matrixB
+	 * @return
+	 */
+	private double[][] matrixAdd(double[][] matrixA, double[][] matrixB) {
+		if ((matrixA.length != matrixB.length || matrixA[0].length != matrixB[0].length)) {
+			System.out.println("Matricis cannot be added:");
+			printMatrix(matrixA);
+			printMatrix(matrixB);
+		}
+		double[][] arrayC = new double[matrixA.length][matrixA[0].length];
+		for (int i = 0; i < matrixA.length; i++) {
+			for (int j = 0; j < matrixA[0].length; j++) {
+				arrayC[i][j] = matrixA[i][j] + matrixB[i][j];
+			}
+		}
+		return arrayC;
+	}
+	
+	/**
+	 * returns a new matrix: the input times by the scalar.
+	 * Inputs are unchanged.
+	 * @param matrix
+	 * @param scalar
+	 * @return
+	 */
+	private double[][] matrixScalar(double[][] matrix, double scalar) {
+		double[][] result = new double[matrix.length][matrix[0].length];
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[0].length; j++) {
+				result[i][j] = matrix[i][j] * scalar;
+			}
+		}		
+		return result;
+	}
+	
+	private void printMatrix(double[][] matrix) {
+		String output = "";
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[0].length; j++) {
+				output += matrix[i][j] + " ";
+			}
+			output += "\n";
+		}
+		System.out.println(output);
+	}
+	
+	/**
+	 * populates the matrix with all random numbers from -1.0 to 1.0
+	 * @param matrix
+	 */
+	private void populateRandom(double[][] matrix) {
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[0].length; j++) {
+				matrix[i][j] = Math.random() - 0.5;
+			}
+		}
+	}
+}

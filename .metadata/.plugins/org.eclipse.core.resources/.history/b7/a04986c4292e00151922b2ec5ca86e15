@@ -1,0 +1,11 @@
+package co.inharmonic.colours.tools;
+
+/**
+ * Contains methods for performing operations on matrices
+ * Matrices are in the form double[rows][columns]
+ * @author Andrew
+ *
+ */
+public class MatrixOps {
+
+}

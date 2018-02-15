@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="co.inharmonic.net.NeuralNet"/>
+<fullyQualifiedTypeName name="co.inharmonic.colours.tools.MatrixOps"/>
+<fullyQualifiedTypeName name="co.inharmonic.colours.net.NeuralNet"/>
+<fullyQualifiedTypeName name="co.inharmonic.colours.control.ColourNet"/>
+<fullyQualifiedTypeName name="co.inharmonic.colours.TrainingData.brightness"/>
+<fullyQualifiedTypeName name="co.inharmonic.colours.TrainingData.colour"/>
+<fullyQualifiedTypeName name="co.inharmonic.colours.TrainingData.saturation"/>
+<fullyQualifiedTypeName name="co.inharmonic.colours.TrainingData"/>
+<fullyQualifiedTypeName name="co.inharmonic.colours.control.TrainingData.brightness"/>
+<fullyQualifiedTypeName name="co.inharmonic.colours.control.TrainingData.colour"/>
+<fullyQualifiedTypeName name="co.inharmonic.audionet.neuralnet.NeuralNet"/>
+<fullyQualifiedTypeName name="co.inharmonic.audionet.audiotools.StdAudio"/>
+<fullyQualifiedTypeName name="java.util.Arrays"/>
+<fullyQualifiedTypeName name="co.inharmonic.audionet.control.TextUI"/>
+<fullyQualifiedTypeName name="co.inharmonic.audionet.neuralnet.TrainingData"/>
+<fullyQualifiedTypeName name="co.inharmonic.audionet.tools.MatrixOps"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+</qualifiedTypeNameHistroy>

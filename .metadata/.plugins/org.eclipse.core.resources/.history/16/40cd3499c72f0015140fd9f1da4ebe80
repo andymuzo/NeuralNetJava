@@ -1,0 +1,44 @@
+package co.inharmonic.audionet.control;
+
+import java.util.Arrays;
+
+import co.inharmonic.audionet.audiotools.StdAudio;
+import co.inharmonic.audionet.neuralnet.TrainingData;
+
+/**
+ * This is used to generate training data from an audio file, 
+ * different methods will accomplish this in different ways
+ * @author Andrew
+ *
+ */
+public class AudioData {
+	String fileName;
+	int sampleStart;
+	int sampleEnd;
+	
+	public void setAudioFile(String fileName, int sampleStart, int sampleEnd) {
+		this.fileName = fileName;
+		this.sampleStart = sampleStart;
+		this.sampleEnd = sampleEnd;
+	}
+	
+	/**
+	 * creates training data whereby a certain number of samples used as inputs, 
+	 * the output is one sample after the last one of the inputs.
+	 * This is populated directly into the TrainingData object
+	 * it is assumed there is just a single output
+	 * @return
+	 */
+	public void predictiveTraining(TrainingData train) {
+		double[] audioInput = Arrays.copyOfRange(StdAudio.read(fileName), sampleStart, sampleEnd);
+		int inputNodes = train.
+		// iterate over the array
+		
+		// input
+		
+		
+		// output
+		
+		
+	}
+}

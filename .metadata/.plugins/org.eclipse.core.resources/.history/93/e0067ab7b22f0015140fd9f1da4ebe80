@@ -1,0 +1,18 @@
+package co.inharmonic.audio;
+
+public class AudioTest01 {
+	public void runTest01() {
+		double[] file = StdAudio.read("audio/violin.wav");
+		System.out.println(file.length);
+		for (int i = 0; i < 100; i++) {
+			System.out.println(file[i]);
+		}
+		StdAudio.play(file);
+		for (int i = 0; i < file.length; i++) {
+			if (file[i] < 0.5) {
+				file[i] = file[i] / 2.0;
+			}
+		}
+		StdAudio.play(file);
+	}
+}
